@@ -7,16 +7,20 @@ import numpy as np
 from datetime import datetime
 import openai
 
-# Load LLM API key
-openai.api_key = st.secrets["OPENAI_API_KEY"]
+st.title("🧠 Review Insights Chatbot (RAG Prototype)")
+
+# Load OpenAI API Key
+try:
+    openai.api_key = st.secrets["OPENAI_API_KEY"]
+except KeyError:
+    st.error("❌ Please add your OpenAI API key to `.streamlit/secrets.toml` or Streamlit Cloud secrets.")
+    st.stop()
 
 # Initialize model and FAISS
 embedder = SentenceTransformer('all-MiniLM-L6-v2')
 index = None
 review_chunks = []
 metadata = []
-
-st.title("🧠 Review Insights Chatbot (RAG Prototype)")
 
 uploaded_file = st.file_uploader("Upload Ratings & Reviews Excel File", type=["xlsx"])
 
